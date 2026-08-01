@@ -119,10 +119,34 @@ header .logo-name {
 /* ---------- Hero ---------- */
 
 .hero {
-  padding: 64px 24px 56px 24px;
+  position: relative;
+  overflow: hidden;
+  padding: 64px 24px 300px 24px;
   text-align: center;
   color: var(--steel-deep);
-  background: radial-gradient(900px circle at 50% 100%, #FFD9CD 0%, #FBB49F 57%, #F5A38C 95%) 50% 100%;
+  background: radial-gradient(900px circle at 50% 100%, #D5E5EF 0%, #A9C6D8 57%, #8EB1C7 95%) 50% 100%;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero .texture {
+  position: absolute;
+  z-index: 0;
+  inset: -150px;
+  transform: rotate(-8deg);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 14px;
+  line-height: 2.7;
+  white-space: pre;
+  text-align: center;
+  color: rgba(23, 52, 74, 0.11);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
 }
 
 .hero h1 {
@@ -132,7 +156,7 @@ header .logo-name {
   font-weight: 600;
   line-height: 1.22;
   letter-spacing: -0.5px;
-  text-shadow: 0 2px 1px rgba(115, 28, 0, 0.12), 0 4px 3px rgba(115, 28, 0, 0.06);
+  text-shadow: 0 2px 1px rgba(15, 44, 66, 0.12), 0 4px 3px rgba(15, 44, 66, 0.06);
 }
 
 .hero .rotator {
@@ -206,26 +230,28 @@ header .logo-name {
 .hero .requires {
   margin: 14px 0 0 0;
   font-size: 0.85rem;
-  color: #8a5045;
+  color: #3d617a;
 }
 
 /* ---------- Intro / tagline ---------- */
 
-.intro {
+.hero .intro {
   max-width: 640px;
   margin: 0 auto;
-  padding: 56px 24px 8px 24px;
+  padding: 52px 0 0 0;
   text-align: center;
   font-size: 1.2rem;
-  color: var(--ink-soft);
+  color: var(--steel-deep);
 }
 
 /* ---------- App preview ---------- */
 
 .preview {
   max-width: 1000px;
-  margin: 48px auto 0 auto;
+  margin: -240px auto 0 auto;
   padding: 0 24px;
+  position: relative;
+  z-index: 1;
 }
 
 .preview .frame {
@@ -337,9 +363,10 @@ footer nav {
   header { height: 76px; gap: 11px; }
   header .logo-mark { width: 42px; height: 42px; flex-basis: 42px; }
   header .logo-name { font-size: 1.28rem; }
-  .hero { padding: 44px 18px 44px 18px; }
+  .hero { padding: 44px 18px 200px 18px; }
   .hero h1 { font-size: calc(4.4vw + 18px); }
-  .intro { font-size: 1.05rem; padding-top: 40px; }
+  .hero .intro { font-size: 1.05rem; padding-top: 36px; }
+  .preview { margin-top: -160px; }
   .features { padding-top: 52px; }
   .features .grid { gap: 32px; }
   .features .card { width: min(340px, 100%); }
@@ -356,6 +383,24 @@ footer nav {
 <main>
 
 <section class="hero">
+  <div class="texture" aria-hidden="true">SELECT TOP (100) name, create_date FROM sys.tables ORDER BY create_date DESC;
+      EXEC sp_who2;   SELECT DB_NAME(), SUSER_SNAME(), @@VERSION;
+WITH cte AS (SELECT ROW_NUMBER() OVER (ORDER BY OrderDate DESC) AS rn FROM dbo.Orders) SELECT * FROM cte WHERE rn &lt;= 10;
+   CREATE NONCLUSTERED INDEX IX_Orders_OrderDate ON dbo.Orders (OrderDate DESC) INCLUDE (CustomerID);
+BEGIN TRANSACTION;   UPDATE dbo.Orders SET Status = N'Shipped' WHERE OrderID = 10248;   COMMIT;
+        SELECT c.CustomerID, COUNT(*) AS OrderCount FROM dbo.Customers AS c JOIN dbo.Orders AS o ON o.CustomerID = c.CustomerID GROUP BY c.CustomerID;
+SELECT session_id, status, command FROM sys.dm_exec_requests WHERE status = N'running';
+     INSERT INTO dbo.Products (Name, ListPrice) VALUES (N'Widget', 9.99);   SELECT SCOPE_IDENTITY();
+ALTER TABLE dbo.Customers ADD Email NVARCHAR(255) NULL;   EXEC sys.sp_rename N'dbo.Old', N'New';
+  SELECT * FROM dbo.Orders WHERE OrderDate &gt;= DATEADD(DAY, -30, SYSDATETIME());
+MERGE dbo.Target AS t USING dbo.Source AS s ON t.ID = s.ID WHEN MATCHED THEN UPDATE SET t.Value = s.Value;
+       SELECT OBJECT_DEFINITION(OBJECT_ID(N'dbo.uspGetOrders'));   GRANT SELECT ON SCHEMA::dbo TO ReportingRole;
+BACKUP DATABASE AdventureWorks TO DISK = N'/var/backups/aw.bak' WITH COMPRESSION;
+   SELECT TOP (10) total_worker_time, execution_count FROM sys.dm_exec_query_stats ORDER BY total_worker_time DESC;
+SELECT name, state_desc FROM sys.databases WHERE state_desc = N'ONLINE';   EXEC sp_updatestats;
+        SELECT t.name, SUM(p.rows) AS [RowCount] FROM sys.tables AS t JOIN sys.partitions AS p ON p.object_id = t.object_id GROUP BY t.name;
+CREATE OR ALTER PROCEDURE dbo.uspGetOrders @CustomerID INT AS BEGIN SELECT * FROM dbo.Orders WHERE CustomerID = @CustomerID; END;
+   SELECT wait_type, wait_time_ms FROM sys.dm_os_wait_stats ORDER BY wait_time_ms DESC;</div>
   <h1>
     SQL Server client for
     <span class="rotator">
@@ -376,12 +421,12 @@ footer nav {
     </svg>
   </a>
   <p class="requires">Requires macOS 13 or later</p>
-</section>
 
-<p class="intro">
-  A fast, native SQL Server manager for the Mac. Sign in with SQL login, Microsoft Entra&nbsp;ID,
-  Kerberos or NTLM — with zero driver installation. Built with Swift.
-</p>
+  <p class="intro">
+    A fast, native SQL Server manager for the Mac. Sign in with SQL login, Microsoft Entra&nbsp;ID,
+    Kerberos or NTLM — with zero driver installation. Built with Swift.
+  </p>
+</section>
 
 <section class="preview" aria-label="Application preview">
   <div class="frame">
@@ -523,6 +568,23 @@ footer nav {
     <a href="privacy-policy.html">Privacy Policy</a>
   </nav>
 </footer>
+
+<script>
+(function () {
+  var texture = document.querySelector('.hero .texture');
+  if (!texture || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ticking = false;
+  addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var shift = Math.min(scrollY * 0.18, 140);
+      texture.style.transform = 'translateY(' + shift + 'px) rotate(-8deg)';
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+</script>
 
 </body>
 </html>
