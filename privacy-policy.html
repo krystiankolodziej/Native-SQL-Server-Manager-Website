@@ -1,141 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8">
-<title>Privacy Policy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Native SQL Server Manager</title>
+<meta name="description" content="Privacy Policy of Native SQL Server Manager for macOS. The app does not collect any data.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nssm.kbksoftware.com/privacy-policy.html">
+<link rel="icon" type="image/png" href="assets/icon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
+
 <style>
-* {box-sizing: border-box;}
-body {font-family: Verdana, sans-serif;}
-img {vertical-align: middle;}
+@font-face {
+  font-family: 'Zilla Slab';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/zilla-slab-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Zilla Slab';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/zilla-slab-600.woff2') format('woff2');
+}
+
+:root {
+  --ink: #2e3a42;
+  --ink-soft: #5b6570;
+  --steel: #2F5F7E;
+  --steel-deep: #24485F;
+  --red: #D63A20;
+  --red-deep: #B02A12;
+  --page-bg: #FFFDF7;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Avenir, "Avenir Next", Century Gothic, "Trebuchet MS", sans-serif;
+  color: var(--ink);
+  background: var(--page-bg);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--red); }
+a:hover { color: var(--red-deep); }
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  max-width: 1060px;
+  height: 96px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+header a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+
+header .logo-mark {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+}
+
+header .logo-name {
+  font-family: 'Zilla Slab', 'MuseoSlab', Rockwell, 'Trebuchet MS', serif;
+  color: #000000;
+  font-size: 1.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 32px 24px 24px 24px;
+}
+
+h1 {
+  font-family: 'Zilla Slab', 'MuseoSlab', Rockwell, 'Trebuchet MS', serif;
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: var(--steel);
+  letter-spacing: -0.3px;
+  margin: 0 0 32px 0;
+}
 
 h2 {
+  font-family: 'Zilla Slab', 'MuseoSlab', Rockwell, 'Trebuchet MS', serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  color: var(--steel-deep);
+  margin: 32px 0 8px 0;
+}
+
+p { margin: 0 0 12px 0; color: var(--ink-soft); }
+
+footer {
+  margin-top: 56px;
+  padding: 32px 24px 40px 24px;
   text-align: center;
-  margin: 0px 0px 4px 0px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  border-top: 1px solid #efe7d8;
 }
 
-h3 {
-  text-align: center;
-  margin: 0px 0px 4px 0px;
+footer nav {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
-h4 {
-  text-align: center;
-  margin: 0px 0px 4px 0px;
-}
-
-h5.subtitle {
-  text-align: center;
-  font-style: italic;
-  font-weight: lighter;
-  letter-spacing: 1px;
-  margin: 0px 0px 10px 0px;
-}
-
-/* Caption text */
-.text {
-  color: #323232;
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: 8px;
-  width: 100%;
-  text-align: center;
-}
-
-.button {
-  background-color: #4CAF50;
-  border: none;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-}
-
-.button2 {
-  border-radius: 4px;
-}
-
-/* Number text (1/3 etc) */
-.numbertext {
-  color: #f2f2f2;
-  font-size: 12px;
-  padding: 8px 12px;
-  position: absolute;
-  top: 0;
-}
-
-.active {
-  background-color: #717171;
-}
-
-a.contactus:link, a.contactus:visited {
-  background-color: #000000;
-  color: white;
-  padding: 2px 3px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border-radius: 3px;
-  font-size: small;
-  text-transform:uppercase;
-}
-
-a.contactus:hover, a.contactus:active {
-  background-color: red;
-}
-
-@-webkit-keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-}
-
-@keyframes fade {
-  from {opacity: .4} 
-  to {opacity: 1}
-}
-
-/* On smaller screens, decrease text size */
-@media only screen and (max-width: 300px) {
-  .text {font-size: 11px}
+@media only screen and (max-width: 720px) {
+  header { height: 76px; gap: 11px; }
+  header .logo-mark { width: 42px; height: 42px; flex-basis: 42px; }
+  header .logo-name { font-size: 1.28rem; }
+  h1 { font-size: 1.9rem; }
 }
 </style>
 </head>
 <body>
 
-<h2>Native SQL Server Manager</h2>  
-<br>
-<br>
-<br>
-<h3 class="subtitle">Privacy Policy</h3>
-<br>
-<br>
-<br>
+<header>
+  <a href="./" aria-label="Native SQL Server Manager — home">
+    <img class="logo-mark" src="assets/icon.png" alt="" width="52" height="52">
+    <span class="logo-name">Native SQL Server Manager</span>
+  </a>
+</header>
 
-<div style="text-align:center">
-    <h5>Introduction</h5>
-    <p>Thank you for using our app. We respect the privacy of our users and are committed to protecting it. This Privacy Policy aims to inform you about what data we collect, why we collect it, and what we do with the data.</p>
+<main>
+  <h1>Privacy Policy</h1>
 
-    <h4>What data do we collect?</h4>
-    <p>Our app <strong>does not collect any data</strong>. We do not track you, we do not collect information about you, we do not store any data, nor do we share it with others.</p>
+  <h2>Introduction</h2>
+  <p>Thank you for using our app. We respect the privacy of our users and are committed to protecting it. This Privacy Policy aims to inform you about what data we collect, why we collect it, and what we do with the data.</p>
 
-    <h4>Why don't we collect data?</h4>
-    <p>We chose not to collect data to provide you with the highest level of privacy. We believe that you can use our app without having to share your data.</p>
+  <h2>What data do we collect?</h2>
+  <p>Our app <strong>does not collect any data</strong>. We do not track you, we do not collect information about you, we do not store any data, nor do we share it with others.</p>
 
-    <h4>Changes to the Privacy Policy</h4>
-    <p>We may occasionally update our Privacy Policy. Any changes will be posted on this page.</p>
-</div>
-<br>
-<br>
-<div style="text-align:center">
-  <a href="itms-apps://itunes.apple.com/app/id1416282836"><img src="en-US/Download_on_the_App_Store_Badge_US-UK_blk_092917.png" alt="Download on the App Store" style="width:120px;height:40px;border:0"></a>
-  <br>
-  <br>
-  <footer>Copyright ® 2026 Krystian Kołodziej <a class="contactus" href="mailto:krystiankolodziej@gmail.com?Subject=Native%20SQL%20Server%20Manager" target="_top">Contact us</a></footer>
-</div>
+  <h2>Why don't we collect data?</h2>
+  <p>We chose not to collect data to provide you with the highest level of privacy. We believe that you can use our app without having to share your data.</p>
+
+  <h2>Changes to the Privacy Policy</h2>
+  <p>We may occasionally update our Privacy Policy. Any changes will be posted on this page.</p>
+</main>
+
+<footer>
+  <div>Copyright © 2026 Krystian Kołodziej</div>
+  <nav>
+    <a href="mailto:krystiankolodziej@gmail.com?Subject=Native%20SQL%20Server%20Manager">Contact</a>
+    <a href="./">Home</a>
+  </nav>
+</footer>
 
 </body>
-</html> 
+</html>
