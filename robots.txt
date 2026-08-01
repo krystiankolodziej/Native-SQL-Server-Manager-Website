@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nssm.kbksoftware.com/sitemap.xml
