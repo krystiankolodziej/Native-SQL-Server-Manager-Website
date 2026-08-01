@@ -1,0 +1,42 @@
+{
+  "env": {
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
+    "DISABLE_FEEDBACK_COMMAND": "1",
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_ERROR_REPORTING": "1"
+  },
+  "cleanupPeriodDays": 7,
+  "permissions": {
+    "allow": [
+      "Bash(xcodebuild:*)",
+      "Bash(sqlite3:*)",
+      "Bash(uuidgen)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "mcp__xcode__XcodeListWindows",
+      "mcp__xcode__XcodeLS",
+      "mcp__xcode__XcodeGlob",
+      "mcp__xcode__XcodeGrep",
+      "mcp__xcode__XcodeRead",
+      "mcp__xcode__XcodeWrite",
+      "mcp__xcode__XcodeUpdate",
+      "mcp__xcode__XcodeMakeDir",
+      "mcp__xcode__XcodeMV",
+      "mcp__xcode__XcodeRM",
+      "mcp__xcode__BuildProject",
+      "mcp__xcode__GetBuildLog",
+      "mcp__xcode__GetTestList",
+      "mcp__xcode__RunSomeTests",
+      "mcp__xcode__RunAllTests",
+      "mcp__xcode__XcodeListNavigatorIssues",
+      "mcp__xcode__XcodeRefreshCodeIssuesInFile",
+      "mcp__xcode__DocumentationSearch"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)"
+    ]
+  }
+}
