@@ -6,7 +6,6 @@
 <title>Native SQL Server Manager — SQL Server client for macOS</title>
 <meta name="description" content="A fast, native SQL Server manager for Mac. Connect with SQL login, Microsoft Entra ID, Kerberos or NTLM — no drivers to install. T-SQL editor with autocompletion, objects explorer and data export. Built with Swift for macOS.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://nssm.kbksoftware.com/">
 <link rel="preload" href="assets/fonts/zilla-slab-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/zilla-slab-600.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="icon" type="image/png" href="assets/icon.png">
@@ -102,28 +101,58 @@ h1, h2 {
 /* ---------- Header ---------- */
 
 header {
+  width: 100%;
+  /* Delikatny żółty gradient o identycznej geometrii jak sekcja hero poniżej */
+  background: radial-gradient(900px circle at 50% 100%, #0E131F 0%, #0E131F 57%, #0E131F 95%) 50% 100%;
+}
+
+.header-inner {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 14px;
   max-width: 1060px;
-  height: 96px;
+  height: 80px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 24px 0 80px;
 }
 
 header .logo-mark {
-  width: 52px;
-  height: 52px;
-  flex: 0 0 52px;
+  width: 42px;  
+  height: 42px;
+  flex: 0 0 32px;
+  overflow: visible; /* Zapobiega przycinaniu cienia podczas ruchu */
+}
+
+/* Stylizacja i fizyka animacji lewitacji logo w nagłówku */
+header .logo-mark-path {
+  fill: #DDDDDD; /* Kolor granatowo-stalowy */
+  transform-origin: 295px 304px;
+  animation: header-logo-float 3s ease-in-out infinite;
+}
+
+header .logo-mark-shadow {
+  fill: rgba(222, 222, 222, 0.95); /* Dopasowany półprzezroczysty cień */
+  transform-origin: 295px 635px;
+  animation: header-logo-shadow 3s ease-in-out infinite;
+}
+
+@keyframes header-logo-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-35px) rotate(2.5deg); }
+}
+
+@keyframes header-logo-shadow {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(0.72); opacity: 0.15; }
 }
 
 header .logo-name {
-  font-family: 'Zilla Slab', 'MuseoSlab', Rockwell, 'Trebuchet MS', serif;
-  color: #000000;
-  font-size: 1.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2px;
+  font-family: 'MuseoSlab', Rockwell, 'Trebuchet MS', serif;
+  color: #DDDDDD;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 1.0px;
 }
 
 /* ---------- Hero ---------- */
@@ -334,8 +363,9 @@ footer nav {
 /* ---------- Responsive ---------- */
 
 @media only screen and (max-width: 720px) {
-  header { height: 76px; gap: 11px; }
-  header .logo-mark { width: 42px; height: 42px; flex-basis: 42px; }
+  header { height: auto; }
+  .header-inner { height: 76px; gap: 11px; padding: 0 18px 0 40px; }
+  header .logo-mark { width: 40px; height: 40px; flex-basis: 40px; }
   header .logo-name { font-size: 1.28rem; }
   .hero { padding: 44px 18px 200px 18px; }
   .hero h1 { font-size: calc(4.4vw + 18px); }
@@ -350,8 +380,15 @@ footer nav {
 <body>
 
 <header>
-  <img class="logo-mark" src="assets/icon.png" alt="Native SQL Server Manager App Icon" width="52" height="52">
-  <span class="logo-name">Native SQL Server Manager</span>
+  <div class="header-inner">
+    <svg class="logo-mark" viewBox="0 0 600 650" aria-label="Native SQL Server Manager App Icon">
+      <!-- Dynamiczny cień u podstawy kształtu -->
+      <ellipse class="logo-mark-shadow" cx="295" cy="635" rx="130" ry="12" />
+      <!-- Precyzyjny wektor logo (kolor granatowo-stalowy #25485F, bez obramowania) -->
+      <path class="logo-mark-path" d="M237.977 604C234.86 604 231.697 603.358 228.764 602.073C219.642 598.036 214.141 588.584 215.195 578.674C228.58 452.551 35.2309 401.946 33.2599 401.487C25.2839 399.468 18.9581 393.274 16.8036 385.337C14.6492 377.4 16.8953 368.866 22.7168 363.039C32.2055 353.542 258.284 129.145 541.936 5.91139C549.867 2.47041 558.851 3.75502 565.544 9.12295C572.19 14.5368 575.261 23.208 573.52 31.5582C519.154 295.092 265.939 584.134 255.213 596.292C250.675 601.293 244.349 604 237.977 604Z" />
+    </svg>
+    <span class="logo-name">Native SQL Server Manager</span>
+  </div>
 </header>
 
 <main>
