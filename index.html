@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Native SQL Server Manager — SQL Server client for macOS</title>
-<meta name="description" content="A fast, native SQL Server manager for Mac. Connect with SQL login, Microsoft Entra ID, Kerberos or NTLM — no drivers to install. T-SQL editor with autocompletion, objects explorer and data export. Built with Swift for macOS.">
+<meta name="description" content="Fast, native SQL Server client for macOS. SQL login, Microsoft Entra ID, Kerberos or NTLM — no drivers. T-SQL editor, objects explorer, in-grid editing, export.">
 <meta name="robots" content="index, follow">
 <link rel="preload" href="assets/fonts/zilla-slab-500.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/zilla-slab-600.woff2" as="font" type="font/woff2" crossorigin>
@@ -14,12 +14,12 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Native SQL Server Manager">
 <meta property="og:title" content="Native SQL Server Manager — SQL Server client for macOS">
-<meta property="og:description" content="A fast, native SQL Server manager for Mac. Entra ID, Kerberos and NTLM sign-in with zero driver installation. Built with Swift.">
+<meta property="og:description" content="A fast, native SQL Server client for the Mac. Entra ID, Kerberos and NTLM sign-in with zero driver installation, a schema-aware T-SQL editor and results you can edit. Built with Swift.">
 <meta property="og:url" content="https://nssm.kbksoftware.com/">
 <meta property="og:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Native SQL Server Manager — SQL Server client for macOS">
-<meta name="twitter:description" content="A fast, native SQL Server manager for Mac. Entra ID, Kerberos and NTLM sign-in with zero driver installation. Built with Swift.">
+<meta name="twitter:description" content="A fast, native SQL Server client for the Mac. Entra ID, Kerberos and NTLM sign-in with zero driver installation, a schema-aware T-SQL editor and results you can edit. Built with Swift.">
 <meta name="twitter:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
 
 <script type="application/ld+json">
@@ -32,7 +32,7 @@
   "url": "https://nssm.kbksoftware.com/",
   "image": "https://nssm.kbksoftware.com/assets/icon.png",
   "screenshot": "https://nssm.kbksoftware.com/assets/MainWindow.png",
-  "description": "A fast, native SQL Server manager for macOS. Connect with SQL login, Microsoft Entra ID, Kerberos or NTLM — no drivers to install. T-SQL editor with schema-aware autocompletion, objects explorer, data editing and export.",
+  "description": "A fast, native SQL Server manager for macOS. Connect with SQL login, Microsoft Entra ID, Kerberos or NTLM — no drivers to install. Schema-aware T-SQL editor, an objects explorer covering every database on the server, in-grid data editing, extended properties, and export to CSV, JSON, XML and SQL.",
   "author": {
     "@type": "Person",
     "name": "Krystian Kołodziej"
@@ -446,22 +446,22 @@ CREATE OR ALTER PROCEDURE dbo.uspGetOrders @CustomerID INT AS BEGIN SELECT * FRO
 
     <div class="card">
       <h3>Many servers, many tabs</h3>
-      <p>Connect to several servers at once. Every query tab stays bound to its own connection and database, just like in SSMS.</p>
+      <p>Connect to several servers at once. Every tab keeps its own session, so a query that runs for minutes never blocks the one you want to run right now.</p>
     </div>
 
     <div class="card">
       <h3>Smart T-SQL editor</h3>
-      <p>Schema-aware autocompletion straight from your server, syntax highlighting with themes, a SQL formatter, query history — and one click to stop a running query.</p>
+      <p>Autocompletion that reads your actual schema — instant even on databases with hundreds of thousands of columns. Syntax highlighting with themes, a SQL formatter and a searchable query history.</p>
     </div>
 
     <div class="card">
       <h3>A complete objects explorer</h3>
-      <p>Tables, views, stored procedures, functions, triggers, synonyms, sequences, types and assemblies — filter by name or even by column across every database on the server.</p>
+      <p>Tables, views, stored procedures, functions, triggers, synonyms, sequences, types and assemblies — down to keys, constraints, indexes and routine parameters. Every database on the server, loaded as you expand it, filtered by name or even by column.</p>
     </div>
 
     <div class="card">
       <h3>Script anything</h3>
-      <p>Generate CREATE, SELECT, INSERT, UPDATE, DELETE or DROP statements for any object — into the current editor, a new tab or the clipboard.</p>
+      <p>Generate CREATE, ALTER, SELECT, INSERT, UPDATE, DELETE or DROP statements for any object — into the current editor, a new tab or the clipboard. Procedures and functions come with a parameters form, filled in and ready to execute.</p>
     </div>
 
     <div class="card">
@@ -471,7 +471,17 @@ CREATE OR ALTER PROCEDURE dbo.uspGetOrders @CustomerID INT AS BEGIN SELECT * FRO
 
     <div class="card">
       <h3>Edit and move data</h3>
-      <p>Edit values right in the results grid, inspect large text and binary values, set NULLs — and export or import data as CSV, JSON, XML and SQL.</p>
+      <p>Edit values right in the results grid, set NULLs and inspect large text and binary values in a viewer built for them. Export results to CSV, JSON, XML or SQL, and load CSV files straight into a table.</p>
+    </div>
+
+    <div class="card">
+      <h3>Exactly what the server returned</h3>
+      <p>Dates, times and offsets are rendered the way SSMS renders them — no silent time-zone shifts, no lossy formatting. Binary, rowversion and geography columns stay untouched until you ask for hex or a preview.</p>
+    </div>
+
+    <div class="card">
+      <h3>Properties, in full</h3>
+      <p>Table, view, index and column properties in one place — including a proper editor for extended properties, so you can document a schema in MS_Description without ever leaving the app.</p>
     </div>
 
     <div class="card">
