@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog — Native SQL Server Manager</title>
+<meta name="description" content="Release history of Native SQL Server Manager for macOS: what changed in each version, from the first release onwards.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nssm.kbksoftware.com/changelog/">
+<link rel="preload" href="../assets/fonts/zilla-slab-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/zilla-slab-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/site.js" defer></script>
+<link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Native SQL Server Manager">
+<meta property="og:title" content="Changelog — Native SQL Server Manager">
+<meta property="og:description" content="What changed in each release of Native SQL Server Manager for macOS.">
+<meta property="og:url" content="https://nssm.kbksoftware.com/changelog/">
+<meta property="og:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Native SQL Server Manager on macOS: objects explorer, T-SQL editor and results grid">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Changelog — Native SQL Server Manager">
+<meta name="twitter:description" content="What changed in each release of Native SQL Server Manager for macOS.">
+<meta name="twitter:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nssm.kbksoftware.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Changelog", "item": "https://nssm.kbksoftware.com/changelog/" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo-link" href="/">
+      <svg class="logo-mark" viewBox="0 0 600 650" aria-hidden="true">
+        <ellipse class="logo-mark-shadow" cx="295" cy="635" rx="130" ry="12" />
+        <path class="logo-mark-path" d="M237.977 604C234.86 604 231.697 603.358 228.764 602.073C219.642 598.036 214.141 588.584 215.195 578.674C228.58 452.551 35.2309 401.946 33.2599 401.487C25.2839 399.468 18.9581 393.274 16.8036 385.337C14.6492 377.4 16.8953 368.866 22.7168 363.039C32.2055 353.542 258.284 129.145 541.936 5.91139C549.867 2.47041 558.851 3.75502 565.544 9.12295C572.19 14.5368 575.261 23.208 573.52 31.5582C519.154 295.092 265.939 584.134 255.213 596.292C250.675 601.293 244.349 604 237.977 604Z" />
+      </svg>
+      <span class="logo-name">Native SQL Server Manager</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#features">Features</a>
+      <a href="/#screenshots">Screenshots</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<p class="breadcrumb"><a href="/">Home</a> › Changelog</p>
+
+<main class="article">
+  <h1>Changelog</h1>
+  <p class="standfirst">
+    Every release, and what actually changed in it. Updates are included in the purchase price.
+  </p>
+
+  <h2>1.2.0</h2>
+
+  <h3>Azure SQL redirects</h3>
+  <p>
+    The client now follows server redirects, so databases behind the Azure SQL <em>Redirect</em>
+    connection policy connect and run queries instead of failing after sign-in. The connection
+    time limit went up to 30 seconds, the value Azure itself puts in its connection strings, which
+    leaves room for the two-step sign-in a redirect requires.
+  </p>
+
+  <h3>Query tabs stored on disk</h3>
+  <p>
+    Open tabs and their scripts used to live in the app preferences, where a few large scripts
+    could slow the whole app down and make new connections time out. Each tab is now kept as its
+    own file in the app’s data folder, saved one at a time, so a tab with a long script costs
+    nothing on the others. Existing tabs migrate automatically on first launch.
+  </p>
+
+  <h3>Entra ID sign-in that stays signed in</h3>
+  <p>
+    Opening another tab or reconnecting after a dropped connection reuses the token from the first
+    sign-in instead of asking again. On macOS the token cache lives in a different keychain group
+    than on iOS, which is why silent sign-in never found it before.
+  </p>
+
+  <h3>Fixes</h3>
+  <ul>
+    <li>Hovering a tab shows its title, server and database.</li>
+    <li>Result columns are sized to their values as well as their names, so dates and identifiers show in full.</li>
+    <li>Running a tab on a different server than it was opened on now clears the previous database instead of asking the new server for it.</li>
+    <li>Entra ID tabs no longer ask, after every restart, whether to reconnect to the same server.</li>
+    <li>Nothing starts, and nothing lands in the history, until the question about where to run a query is answered.</li>
+    <li>Choosing a default data formatter in Preferences shows the selection, and a formatter can be removed with the Delete key or the context menu.</li>
+    <li>The connection window no longer grows after picking an entry from the history.</li>
+  </ul>
+
+  <h2>1.1.0</h2>
+
+  <h3>Graphical execution plans</h3>
+  <p>
+    The headline addition. Switch on <em>Include Actual Execution Plan</em> and the plan comes back as
+    a diagram rather than XML, laid out the way SQL Server Management Studio lays it out: operators
+    left to right, relative cost shown per operator, and warnings marked on the nodes that carry them.
+    The plan and the results split the window, and the whole tree can be walked from the keyboard.
+    Statements that return no operator tree keep their normal results grid.
+  </p>
+
+  <h3>Faster object tree on very large databases</h3>
+  <p>
+    Expanding a database with sixteen thousand tables no longer crawls. Row counts, schema resolution
+    and lazily loaded nodes were rebuilt to avoid the quadratic work that made large catalogues
+    painful.
+  </p>
+
+  <h3>Fixes</h3>
+  <ul>
+    <li>Grid editing and cell formatting now follow the value’s real type rather than a guess.</li>
+    <li>Disconnect releases the connection immediately instead of waiting on a dead request stream.</li>
+    <li>Loading a database no longer expands unrelated subtrees on other connections.</li>
+    <li>A binary parameter no longer prevents the result columns from being described.</li>
+    <li>Running a selection containing emoji executes the whole selection.</li>
+    <li>Several crashes and rendering faults in the results grid.</li>
+  </ul>
+
+  <h2>1.0</h2>
+  <p>
+    First release. A native SQL Server client for macOS that speaks TDS directly — no ODBC driver, no
+    Homebrew, no Java or Electron runtime.
+  </p>
+  <ul>
+    <li>
+      SQL authentication, Microsoft Entra&nbsp;ID (browser, device code, username and password, or a
+      service principal), Kerberos single sign-on and NTLM.
+    </li>
+    <li>Several servers at once, each tab holding its own session, with queries that can be cancelled.</li>
+    <li>
+      A T-SQL editor driven by the real schema: autocompletion, parameter hints, themes, a formatter
+      and searchable history.
+    </li>
+    <li>
+      An objects explorer covering every database on the server, down to keys, constraints, indexes,
+      dependent views and routine parameters.
+    </li>
+    <li>Scripting to CREATE and DROP for any object, SELECT, INSERT, UPDATE and DELETE for tables, and CREATE, ALTER or CREATE OR ALTER for routines, with a parameters form for executing them.</li>
+    <li>In-grid editing, copying rows as SQL statements, export to CSV, JSON, XML and SQL, and CSV import.</li>
+    <li>Table, view, index and column properties, including an editor for extended properties.</li>
+  </ul>
+
+  <div class="cta-band">
+    <h2>Actively maintained, one price</h2>
+    <p>Updates are included — no subscription, no upgrade fee. $19.99, one-time purchase.</p>
+    <a class="buy-button" href="https://apps.apple.com/app/id6775192660">Get it on the Mac App Store</a>
+  </div>
+</main>
+
+<footer>
+  <nav class="footer-guides" aria-label="Guides">
+    <a href="/windows-authentication-kerberos/">Kerberos single sign-on</a>
+    <a href="/entra-id-sql-server-mac/">Entra ID sign-in</a>
+    <a href="/connect-without-odbc/">Connecting without ODBC</a>
+    <a href="/ssms-for-mac/">SSMS for Mac</a>
+    <a href="/azure-data-studio-alternative-mac/">After Azure Data Studio</a>
+  </nav>
+  <div>Copyright © 2026 Krystian Kołodziej</div>
+  <nav aria-label="Secondary">
+    <a href="mailto:krystiankolodziej@gmail.com?Subject=Native%20SQL%20Server%20Manager">Contact</a>
+    <a href="/">Home</a>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="https://nsm.kbksoftware.com">Native SQLite Manager</a>
+  </nav>
+</footer>
+
+</body>
+</html>

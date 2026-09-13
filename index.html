@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Native SQL Server Manager — SQL Server client for macOS</title>
+<meta name="description" content="Fast, native SQL Server client for macOS. SQL login, Microsoft Entra ID, Kerberos or NTLM — no drivers. T-SQL editor, objects explorer, in-grid editing, export.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nssm.kbksoftware.com/">
+<link rel="preload" href="assets/fonts/zilla-slab-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/zilla-slab-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/site.css">
+<script src="assets/site.js" defer></script>
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Native SQL Server Manager">
+<meta property="og:title" content="Native SQL Server Manager — SQL Server client for macOS">
+<meta property="og:description" content="A fast, native SQL Server client for the Mac. Entra ID, Kerberos and NTLM sign-in with zero driver installation, a schema-aware T-SQL editor and results you can edit. Built with Swift.">
+<meta property="og:url" content="https://nssm.kbksoftware.com/">
+<meta property="og:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Native SQL Server Manager on macOS: objects explorer, T-SQL editor and results grid">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Native SQL Server Manager — SQL Server client for macOS">
+<meta name="twitter:description" content="A fast, native SQL Server client for the Mac. Entra ID, Kerberos and NTLM sign-in with zero driver installation, a schema-aware T-SQL editor and results you can edit. Built with Swift.">
+<meta name="twitter:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Native SQL Server Manager",
+  "operatingSystem": "macOS 13.0 or later",
+  "applicationCategory": "DeveloperApplication",
+  "url": "https://nssm.kbksoftware.com/",
+  "image": "https://nssm.kbksoftware.com/assets/icon.png",
+  "screenshot": "https://nssm.kbksoftware.com/assets/21_Main_Dark.jpg",
+  "description": "A fast, native SQL Server manager for macOS. Connect with SQL login, Microsoft Entra ID, Kerberos or NTLM — no drivers to install. Schema-aware T-SQL editor, an objects explorer covering every database on the server, in-grid data editing, extended properties, and export to CSV, JSON, XML and SQL.",
+  "author": {
+    "@type": "Person",
+    "name": "Krystian Kołodziej"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "19.99",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://apps.apple.com/app/id6775192660",
+    "description": "One-time purchase on the Mac App Store — no subscription"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can I use Windows authentication from a Mac?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. If your Mac already holds a Kerberos ticket for the domain, you can connect with single sign-on and no password at all. Where Kerberos is not available, NTLM works as a fallback with your domain user name and password."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which versions of SQL Server are supported?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The app speaks TDS 7.4, the protocol version introduced with SQL Server 2012, so it works with SQL Server 2012 and later, as well as Azure SQL Database. The one exception is an instance configured to force strict encryption (TDS 8.0, SQL Server 2022 and later) — that mode is not supported."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it run natively on Apple silicon?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It is written in Swift and AppKit and runs natively on Apple silicon, as well as on Intel Macs running macOS 13 or later. It is not an Electron or Java application, so it launches quickly and stays light on memory."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I edit query results directly in the grid?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, provided the grid contains every column of the table’s primary key — that is what lets the app identify the row to update, so a query that selects only some of the key columns gives you a read-only grid. The rows also have to come from a real table: results from a view, an aggregate or a temporary table are read-only, as are IDENTITY, computed and rowversion columns, which the server fills in itself. Where editing applies, you can change values in place, set NULLs, and copy selected rows as ready-to-run INSERT, UPDATE or DELETE statements — with INSERT available both with and without identity values."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a free trial?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. There is no trial version and no time-limited mode — the app is a single one-time purchase. The Mac App Store’s own refund policy applies to it as it does to any other purchase, so if it turns out not to suit your setup, you can ask Apple for a refund."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <svg class="logo-mark" viewBox="0 0 600 650" aria-label="Native SQL Server Manager App Icon">
+      <ellipse class="logo-mark-shadow" cx="295" cy="635" rx="130" ry="12" />
+      <path class="logo-mark-path" d="M237.977 604C234.86 604 231.697 603.358 228.764 602.073C219.642 598.036 214.141 588.584 215.195 578.674C228.58 452.551 35.2309 401.946 33.2599 401.487C25.2839 399.468 18.9581 393.274 16.8036 385.337C14.6492 377.4 16.8953 368.866 22.7168 363.039C32.2055 353.542 258.284 129.145 541.936 5.91139C549.867 2.47041 558.851 3.75502 565.544 9.12295C572.19 14.5368 575.261 23.208 573.52 31.5582C519.154 295.092 265.939 584.134 255.213 596.292C250.675 601.293 244.349 604 237.977 604Z" />
+    </svg>
+    <span class="logo-name">Native SQL Server Manager</span>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#features">Features</a>
+      <a href="#screenshots">Screenshots</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<section class="hero">
+  <h1>
+    SQL Server client for
+    <!-- Tylko #word1 niesie tekst. Pozostałe warianty podaje CSS przez ::after,
+         żeby H1 w DOM został jednoznaczny także po renderowaniu przez Googlebota. -->
+    <span class="rotator">
+      <span id="word1">macOS</span>
+      <span id="word2" aria-hidden="true"></span>
+      <span id="word3" class="long" aria-hidden="true"></span>
+      <span id="word4" class="long" aria-hidden="true"></span>
+    </span>
+  </h1>
+
+  <div class="texture" aria-hidden="true">SELECT TOP (100) name, create_date FROM sys.tables ORDER BY create_date DESC;
+      EXEC sp_who2;   SELECT DB_NAME(), SUSER_SNAME(), @@VERSION;
+WITH cte AS (SELECT ROW_NUMBER() OVER (ORDER BY OrderDate DESC) AS rn FROM dbo.Orders) SELECT * FROM cte WHERE rn &lt;= 10;
+   CREATE NONCLUSTERED INDEX IX_Orders_OrderDate ON dbo.Orders (OrderDate DESC) INCLUDE (CustomerID);
+BEGIN TRANSACTION;   UPDATE dbo.Orders SET Status = N'Shipped' WHERE OrderID = 10248;   COMMIT;
+        SELECT c.CustomerID, COUNT(*) AS OrderCount FROM dbo.Customers AS c JOIN dbo.Orders AS o ON o.CustomerID = c.CustomerID GROUP BY c.CustomerID;
+SELECT session_id, status, command FROM sys.dm_exec_requests WHERE status = N'running';
+     INSERT INTO dbo.Products (Name, ListPrice) VALUES (N'Widget', 9.99);   SELECT SCOPE_IDENTITY();
+ALTER TABLE dbo.Customers ADD Email NVARCHAR(255) NULL;   EXEC sys.sp_rename N'dbo.Old', N'New';
+  SELECT * FROM dbo.Orders WHERE OrderDate &gt;= DATEADD(DAY, -30, SYSDATETIME());
+MERGE dbo.Target AS t USING dbo.Source AS s ON t.ID = s.ID WHEN MATCHED THEN UPDATE SET t.Value = s.Value;
+       SELECT OBJECT_DEFINITION(OBJECT_ID(N'dbo.uspGetOrders'));   GRANT SELECT ON SCHEMA::dbo TO ReportingRole;
+BACKUP DATABASE AdventureWorks TO DISK = N'/var/backups/aw.bak' WITH COMPRESSION;
+   SELECT TOP (10) total_worker_time, execution_count FROM sys.dm_exec_query_stats ORDER BY total_worker_time DESC;
+SELECT name, state_desc FROM sys.databases WHERE state_desc = N'ONLINE';   EXEC sp_updatestats;
+        SELECT t.name, SUM(p.rows) AS [RowCount] FROM sys.tables AS t JOIN sys.partitions AS p ON p.object_id = t.object_id GROUP BY t.name;
+CREATE OR ALTER PROCEDURE dbo.uspGetOrders @CustomerID INT AS BEGIN SELECT * FROM dbo.Orders WHERE CustomerID = @CustomerID; END;
+   SELECT wait_type, wait_time_ms FROM sys.dm_os_wait_stats ORDER BY wait_time_ms DESC;</div>
+
+  <a class="appstore-badge" href="https://apps.apple.com/app/id6775192660" aria-label="Download Native SQL Server Manager on the App Store">
+    <svg width="180" height="60" viewBox="0 0 180 60" role="img" aria-hidden="true">
+      <rect x="0.5" y="0.5" width="179" height="59" rx="10" fill="#000" stroke="#a6a6a6"/>
+      <path d="M36.6 30.4c0-3.6 3-5.4 3.1-5.5-1.7-2.5-4.3-2.8-5.3-2.8-2.2-.2-4.4 1.3-5.5 1.3-1.1 0-2.9-1.3-4.8-1.3-2.4 0-4.7 1.4-5.9 3.6-2.6 4.4-.7 11 1.8 14.6 1.2 1.8 2.7 3.8 4.6 3.7 1.8-.1 2.5-1.2 4.7-1.2s2.8 1.2 4.8 1.2c2 0 3.2-1.8 4.4-3.6 1.4-2 2-4 2-4.1-.1-.1-3.9-1.5-3.9-5.9zM33 19.8c1-1.2 1.7-2.9 1.5-4.6-1.4.1-3.2 1-4.2 2.2-.9 1.1-1.7 2.8-1.5 4.4 1.6.2 3.2-.8 4.2-2z" fill="#fff"/>
+      <text x="52" y="24" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif" font-size="11">Download on the</text>
+      <text x="52" y="45" fill="#fff" font-family="-apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif" font-size="21" font-weight="600">App Store</text>
+    </svg>
+  </a>
+  <p class="requires">$19.99, one-time purchase · Requires macOS 13 or later</p>
+
+  <p class="intro">
+    A fast, native SQL Server manager for the Mac. Sign in with SQL login, Microsoft Entra&nbsp;ID,
+    Kerberos or NTLM — with zero driver installation. Built with Swift.
+  </p>
+</section>
+
+<section class="preview" aria-label="Application preview">
+  <a class="zoom" href="assets/21_Main_Dark_full.webp">
+    <picture>
+      <source srcset="assets/21_Main_Dark.webp" type="image/webp">
+      <img src="assets/21_Main_Dark.jpg" alt="Native SQL Server Manager in dark mode: objects explorer on the left, a T-SQL editor with two queries, and results grids below" width="1600" height="1000" fetchpriority="high" decoding="async">
+    </picture>
+  </a>
+</section>
+
+<section class="features" id="features">
+  <h2>Everything you need to work with SQL Server on a Mac</h2>
+  <div class="grid">
+
+    <div class="card">
+      <h3>Truly native</h3>
+      <p>A real Mac app built with Swift and AppKit. Fast, light on memory, at home in dark mode — no Electron, no Java.</p>
+    </div>
+
+    <div class="card">
+      <h3>Zero setup</h3>
+      <p>The SQL Server wire protocol is built right in, so you can <a href="/connect-without-odbc/">connect to SQL Server without ODBC drivers</a>. Nothing to configure, no Homebrew — download and connect.</p>
+    </div>
+
+    <div class="card">
+      <h3>Sign in your way</h3>
+      <p>SQL authentication, <a href="/entra-id-sql-server-mac/">Microsoft Entra&nbsp;ID</a>, Windows authentication with <a href="/windows-authentication-kerberos/">Kerberos single sign-on</a>, or NTLM. Works with Azure SQL and on-premises servers alike.</p>
+    </div>
+
+    <div class="card">
+      <h3>Many servers, many tabs</h3>
+      <p>Connect to several servers at once. Every tab keeps its own session, so a query that runs for minutes never blocks the one you want to run right now.</p>
+    </div>
+
+    <div class="card">
+      <h3>Smart T-SQL editor</h3>
+      <p>Autocompletion that reads your actual schema — instant even on databases with hundreds of thousands of columns. Syntax highlighting with themes, a SQL formatter and a searchable query history.</p>
+    </div>
+
+    <div class="card">
+      <h3>A complete objects explorer</h3>
+      <p>Tables, views, stored procedures, functions, triggers, synonyms, sequences, types and assemblies — down to keys, constraints, indexes and routine parameters. Every database on the server, loaded as you expand it, filtered by name or even by column.</p>
+    </div>
+
+    <div class="card">
+      <h3>Script anything</h3>
+      <p>Generate the statements SSMS generates — CREATE and DROP for any object, SELECT, INSERT, UPDATE and DELETE for tables, and CREATE, ALTER or CREATE OR ALTER for procedures and functions — into the current editor, a new tab or the clipboard. Procedures and functions come with a parameters form, filled in and ready to execute.</p>
+    </div>
+
+    <div class="card">
+      <h3>Execution plans, drawn</h3>
+      <p>Turn on the actual execution plan and read it as a diagram laid out the way SSMS lays it out — relative cost per operator, warnings called out, and full keyboard navigation through the tree.</p>
+    </div>
+
+    <div class="card">
+      <h3>Copy rows as SQL</h3>
+      <p>Turn selected result rows into INSERT, UPDATE or DELETE statements in correct T-SQL — the WHERE clause is filled in from the primary key whenever the rows trace back to a single table — or copy them as CSV and TSV.</p>
+    </div>
+
+    <div class="card">
+      <h3>Edit and move data</h3>
+      <p>Edit values right in the results grid, set NULLs and inspect large text and binary values in a viewer built for them. Export results to CSV, JSON, XML or SQL, and load CSV files straight into a table.</p>
+    </div>
+
+    <div class="card">
+      <h3>Exactly what the server returned</h3>
+      <p>Dates, times and offsets are rendered the way <a href="/ssms-for-mac/">SSMS</a> renders them — no silent time-zone shifts, no lossy formatting. Binary, rowversion and geography columns stay untouched until you ask for hex or a preview.</p>
+    </div>
+
+    <div class="card">
+      <h3>Properties, in full</h3>
+      <p>Table, view, index and column properties in one place — including a proper editor for extended properties, so you can document a schema in MS_Description without ever leaving the app.</p>
+    </div>
+
+    <div class="card">
+      <h3>Somewhere to land after Azure Data Studio</h3>
+      <p>Azure Data Studio was retired on 28 February 2026 and no longer receives fixes. This is a maintained, native <a href="/azure-data-studio-alternative-mac/">Azure Data Studio alternative for the Mac</a> — same daily work, without an Electron runtime underneath.</p>
+    </div>
+
+    <div class="card">
+      <h3>Private by design</h3>
+      <p>No telemetry, no accounts, no data collection. Passwords live in the macOS Keychain, and nothing about your queries or your servers is sent anywhere but the server you connected to.</p>
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="screenshots">
+  <h2>A closer look</h2>
+  <p class="lede">Four corners of the app: connecting, browsing, documenting and making it your own.</p>
+  <div class="gallery">
+
+    <figure>
+      <a class="zoom" href="assets/02_ConnectSQLAuthentication_Light_full.webp">
+        <picture>
+          <source srcset="assets/02_ConnectSQLAuthentication_Light.webp" type="image/webp">
+          <img src="assets/02_ConnectSQLAuthentication_Light.jpg" alt="Connection dialog with host, port and database fields above an authentication picker offering SQL, Entra ID, Kerberos and NTLM" width="1400" height="875" loading="lazy" decoding="async">
+        </picture>
+      </a>
+      <figcaption>Four ways to sign in — SQL, Entra&nbsp;ID, Kerberos and NTLM — with recent connections one click away.</figcaption>
+    </figure>
+
+    <figure>
+      <a class="zoom" href="assets/01_Main_Light_full.webp">
+        <picture>
+          <source srcset="assets/01_Main_Light.webp" type="image/webp">
+          <img src="assets/01_Main_Light.jpg" alt="Main window in light mode with the objects explorer expanded over tables and stored procedures, a T-SQL editor and results grids" width="1400" height="875" loading="lazy" decoding="async">
+        </picture>
+      </a>
+      <figcaption>The whole server in one tree, next to a T-SQL editor that knows your schema.</figcaption>
+    </figure>
+
+    <figure>
+      <a class="zoom" href="assets/04_DatabaseProperties_Light_full.webp">
+        <picture>
+          <source srcset="assets/04_DatabaseProperties_Light.webp" type="image/webp">
+          <img src="assets/04_DatabaseProperties_Light.jpg" alt="Database properties window listing server-reported settings for the selected database" width="1400" height="875" loading="lazy" decoding="async">
+        </picture>
+      </a>
+      <figcaption>Database, table, view, index and column properties — read straight from the server.</figcaption>
+    </figure>
+
+    <figure>
+      <a class="zoom" href="assets/07_PreferencesFontsAndColors_Light_full.webp">
+        <picture>
+          <source srcset="assets/07_PreferencesFontsAndColors_Light.webp" type="image/webp">
+          <img src="assets/07_PreferencesFontsAndColors_Light.jpg" alt="Fonts and colors preferences showing syntax tokens and a live preview of the T-SQL editor theme" width="1400" height="875" loading="lazy" decoding="async">
+        </picture>
+      </a>
+      <figcaption>Themes you can adjust token by token, in light and dark mode alike.</figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<section class="section pricing" id="pricing">
+  <h2>One price, no subscription</h2>
+  <p class="lede">Buy it once on the Mac App Store. It keeps working whether or not you ever open this page again.</p>
+  <div class="price-card">
+    <div class="amount"><span class="currency">$</span>19.99</div>
+    <p class="terms">One-time purchase · Mac App Store</p>
+    <ul>
+      <li>No subscription, no licence server, no account to create</li>
+      <li>Updates included</li>
+      <li>Unlimited servers and connections</li>
+      <li>SQL, Entra&nbsp;ID, Kerberos and NTLM sign-in</li>
+      <li>Requires macOS 13 or later</li>
+    </ul>
+    <div>
+      <a class="buy-button" href="https://apps.apple.com/app/id6775192660">Get it on the Mac App Store</a>
+    </div>
+  </div>
+</section>
+
+<section class="section faq" id="faq">
+  <h2>Questions</h2>
+
+  <div class="qa">
+    <h3>Can I use Windows authentication from a Mac?</h3>
+    <p>Yes. If your Mac already holds a Kerberos ticket for the domain, you can connect with <a href="/windows-authentication-kerberos/">single sign-on</a> and no password at all. Where Kerberos is not available, NTLM works as a fallback with your domain user name and password.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Which versions of SQL Server are supported?</h3>
+    <p>The app speaks TDS 7.4, the protocol version introduced with SQL Server 2012, so it works with SQL Server 2012 and later, as well as Azure SQL Database. The one exception is an instance configured to force strict encryption (TDS 8.0, SQL Server 2022 and later) — that mode is not supported.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Does it run natively on Apple silicon?</h3>
+    <p>Yes. It is written in Swift and AppKit and runs natively on Apple silicon, as well as on Intel Macs running macOS 13 or later. It is not an Electron or Java application, so it launches quickly and stays light on memory.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Can I edit query results directly in the grid?</h3>
+    <p>Yes, provided the grid contains every column of the table’s primary key — that is what lets the app identify the row to update, so a query that selects only some of the key columns gives you a read-only grid. The rows also have to come from a real table: results from a view, an aggregate or a temporary table are read-only, as are IDENTITY, computed and rowversion columns, which the server fills in itself. Where editing applies, you can change values in place, set NULLs, and copy selected rows as ready-to-run INSERT, UPDATE or DELETE statements — with INSERT available both with and without identity values.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Is there a free trial?</h3>
+    <p>No. There is no trial version and no time-limited mode — the app is a single one-time purchase. The Mac App Store’s own refund policy applies to it as it does to any other purchase, so if it turns out not to suit your setup, you can ask Apple for a refund.</p>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <nav class="footer-guides" aria-label="Guides">
+    <a href="/windows-authentication-kerberos/">Kerberos single sign-on</a>
+    <a href="/entra-id-sql-server-mac/">Entra ID sign-in</a>
+    <a href="/connect-without-odbc/">Connecting without ODBC</a>
+    <a href="/ssms-for-mac/">SSMS for Mac</a>
+    <a href="/azure-data-studio-alternative-mac/">After Azure Data Studio</a>
+  </nav>
+  <div>Copyright © 2026 Krystian Kołodziej</div>
+  <nav aria-label="Secondary">
+    <a href="mailto:krystiankolodziej@gmail.com?Subject=Native%20SQL%20Server%20Manager">Contact</a>
+    <a href="/changelog/">Changelog</a>
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="https://nsm.kbksoftware.com">Native SQLite Manager</a>
+  </nav>
+</footer>
+
+
+</body>
+</html>

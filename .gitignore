@@ -1,0 +1,5 @@
+.DS_Store
+logs/
+
+# Narzędzie pomocnicze do zrzutów — źródło zostaje, binarka nie.
+.claude/cropimg

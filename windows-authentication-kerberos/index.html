@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kerberos SSO to SQL Server from a Mac — without a VM</title>
+<meta name="description" content="Windows authentication from macOS: Kerberos tickets, service principal names, realms and the NTLM alternative — no ODBC driver and no Windows virtual machine.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nssm.kbksoftware.com/windows-authentication-kerberos/">
+<link rel="preload" href="../assets/fonts/zilla-slab-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/zilla-slab-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/site.js" defer></script>
+<link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Native SQL Server Manager">
+<meta property="og:title" content="Kerberos SSO to SQL Server from a Mac — Windows authentication without a VM">
+<meta property="og:description" content="Tickets, SPNs, realms and the NTLM fallback: how Windows authentication actually works when the client is a Mac.">
+<meta property="og:url" content="https://nssm.kbksoftware.com/windows-authentication-kerberos/">
+<meta property="og:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Native SQL Server Manager on macOS: objects explorer, T-SQL editor and results grid">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kerberos SSO to SQL Server from a Mac">
+<meta name="twitter:description" content="Tickets, SPNs, realms and the NTLM fallback: how Windows authentication actually works when the client is a Mac.">
+<meta name="twitter:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nssm.kbksoftware.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Kerberos single sign-on", "item": "https://nssm.kbksoftware.com/windows-authentication-kerberos/" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can a Mac use Windows authentication against SQL Server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. macOS ships with a full Kerberos implementation, and SQL Server accepts Kerberos tickets as Windows authentication. Once your Mac holds a ticket for the domain, a client that speaks TDS directly can sign in with no password prompt at all. NTLM is available where Kerberos is not."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to join the Mac to the domain for Kerberos SSO?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Domain binding is one way to get tickets automatically, but it is not a requirement. Running kinit with your domain account is enough to obtain a ticket-granting ticket, and that ticket is all the client needs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why does SQL Server reject my Kerberos login with error 18452?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Error 18452 — login from an untrusted domain — usually means the server could not tie your credential to a domain principal. The common causes are a missing or wrong service principal name on the SQL Server service account, an expired ticket, or a realm name written in the wrong case."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo-link" href="/">
+      <svg class="logo-mark" viewBox="0 0 600 650" aria-hidden="true">
+        <ellipse class="logo-mark-shadow" cx="295" cy="635" rx="130" ry="12" />
+        <path class="logo-mark-path" d="M237.977 604C234.86 604 231.697 603.358 228.764 602.073C219.642 598.036 214.141 588.584 215.195 578.674C228.58 452.551 35.2309 401.946 33.2599 401.487C25.2839 399.468 18.9581 393.274 16.8036 385.337C14.6492 377.4 16.8953 368.866 22.7168 363.039C32.2055 353.542 258.284 129.145 541.936 5.91139C549.867 2.47041 558.851 3.75502 565.544 9.12295C572.19 14.5368 575.261 23.208 573.52 31.5582C519.154 295.092 265.939 584.134 255.213 596.292C250.675 601.293 244.349 604 237.977 604Z" />
+      </svg>
+      <span class="logo-name">Native SQL Server Manager</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#features">Features</a>
+      <a href="/#screenshots">Screenshots</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<p class="breadcrumb"><a href="/">Home</a> › Kerberos single sign-on</p>
+
+<main class="article">
+  <h1>Kerberos single sign-on to SQL Server from a Mac</h1>
+  <p class="standfirst">
+    Windows authentication is not a Windows-only feature. macOS has carried a complete Kerberos
+    implementation for two decades, and SQL Server is happy to accept a ticket from it. What is
+    usually missing is a client that can present one.
+  </p>
+
+  <h2>What Windows authentication really is</h2>
+  <p>
+    “Windows authentication” names two different mechanisms that SQL Server treats as one option in a
+    dialog box. The modern one is <strong>Kerberos</strong>: your machine obtains a ticket from the
+    domain controller, hands a service ticket to SQL Server, and the server reads your identity out of
+    it. The older one is <strong>NTLM</strong>, a challenge–response exchange that proves you know a
+    password without sending it.
+  </p>
+  <p>
+    Neither of them requires Windows on the client side. Kerberos is an open standard, and macOS
+    implements it in the operating system — the same machinery behind <code>kinit</code> and
+    <code>klist</code> in Terminal. The obstacle on a Mac has never been the protocol. It has been
+    that most SQL clients reach SQL Server through an ODBC driver, and getting that driver to
+    negotiate Kerberos correctly is an afternoon most people would rather not spend.
+  </p>
+
+  <h2>Getting a ticket</h2>
+  <p>
+    Kerberos starts with a ticket-granting ticket. If your Mac is bound to the domain, or you sign in
+    through an identity agent your organisation manages, you already have one. If not, ask for one:
+  </p>
+<pre><code>kinit your.name@CORP.EXAMPLE.COM
+klist</code></pre>
+  <p>
+    Two details cost people more time than anything else here:
+  </p>
+  <ul>
+    <li>
+      <strong>The realm is not always the DNS domain.</strong> A company whose servers answer to
+      <code>ad.example.com</code> may well run a Kerberos realm called
+      <code>CORP.EXAMPLE.COM</code>. Ask, or read it out of <code>klist</code> once a colleague’s
+      machine has a working ticket. Guessing wrong produces an authentication failure that looks like
+      a password problem and is not one.
+    </li>
+    <li>
+      <strong>Case matters.</strong> Realms are conventionally uppercase and Kerberos compares them
+      literally. <code>corp.example.com</code> and <code>CORP.EXAMPLE.COM</code> are not the same
+      realm.
+    </li>
+  </ul>
+  <p>
+    <code>klist</code> should now show a <code>krbtgt/</code> entry with an expiry date. That ticket
+    is the whole of what a client needs; there is nothing to type into the app.
+  </p>
+
+  <h2>The service principal name</h2>
+  <p>
+    Before the domain controller will issue a service ticket for your database server, it has to know
+    that the server exists as a principal. That registration is the
+    <strong>service principal name</strong>, and for SQL Server it looks like this:
+  </p>
+<pre><code>MSSQLSvc/sqlserver.corp.example.com:1433</code></pre>
+  <p>
+    The port is not decoration. A SQL Server on a non-default port needs an SPN that names that port,
+    and an instance reached through the SQL Server Browser may have an SPN written with the instance
+    name instead. If the SPN is missing or registered against the wrong account, Kerberos cannot
+    proceed and the connection fails — often with
+    <em>“Login failed. The login is from an untrusted domain”</em>, error 18452. Switching the picker
+    to NTLM is then the way round it. Your domain
+    administrator can confirm the registration with <code>setspn -L</code> against the SQL Server
+    service account.
+  </p>
+  <p>
+    A useful sanity check before blaming authentication at all: make sure port 1433 on that host is
+    actually reachable from your Mac. A firewall that silently drops the connection produces symptoms
+    that are easy to mistake for a Kerberos problem.
+  </p>
+
+  <h2>Connecting</h2>
+  <p>
+    With a ticket in hand, connecting is the least interesting part. In Native SQL Server Manager you
+    choose <strong>Kerberos</strong> in the connection dialog, enter the host and database, and
+    connect. There is no user name field and no password field, because there is nothing to type:
+    the ticket already says who you are.
+  </p>
+
+  <figure>
+    <a class="zoom" href="../assets/02_ConnectSQLAuthentication_Light_full.webp">
+      <picture>
+        <source srcset="../assets/02_ConnectSQLAuthentication_Light.webp" type="image/webp">
+        <img src="../assets/02_ConnectSQLAuthentication_Light.jpg" alt="Connection dialog with the authentication picker showing SQL, Entra ID, Kerberos and NTLM options" width="1400" height="875" loading="lazy" decoding="async">
+      </picture>
+    </a>
+    <figcaption>The authentication picker: SQL, Entra&nbsp;ID, Kerberos and NTLM, side by side.</figcaption>
+  </figure>
+
+  <h2>When Kerberos is not an option: NTLM</h2>
+  <p>
+    Kerberos needs a domain controller you can reach and an SPN that exists. Away from the office
+    network, or against a server nobody has registered properly, NTLM still works. It asks for your
+    domain user name and password and performs the challenge–response exchange itself.
+  </p>
+  <p>
+    One wrinkle worth knowing, because it produces a login failure that looks like a typo: NTLMv2
+    folds the domain name into its key derivation in a specific case, so a domain typed as
+    <code>corp</code> and one typed as <code>CORP</code> are not interchangeable everywhere in the
+    exchange. The app normalises this for you — but if you have ever had an NTLM login rejected by
+    SQL Server while the same credentials worked from a Windows machine, this is a likely culprit.
+  </p>
+
+  <h2>Why the client matters</h2>
+  <p>
+    Native SQL Server Manager implements TDS, the SQL Server wire protocol, directly. That is what
+    makes single sign-on straightforward rather than an ordeal: there is no ODBC driver in the middle
+    to configure, no <code>odbc.ini</code>, no Homebrew formula that needs reinstalling after every
+    macOS update, and no Windows virtual machine to keep alive just so you can run a query. The app
+    asks macOS for a service ticket and puts it on the wire.
+  </p>
+  <div class="cta-band">
+    <h2>Windows authentication, from the Mac you already use</h2>
+    <p>Kerberos SSO, NTLM, Entra&nbsp;ID and SQL logins in one native app. $19.99, one-time purchase.</p>
+    <a class="buy-button" href="https://apps.apple.com/app/id6775192660">Get it on the Mac App Store</a>
+  </div>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/entra-id-sql-server-mac/">Signing in to Azure SQL with Microsoft Entra ID from a Mac</a> — the cloud counterpart to this page.</li>
+    <li><a href="/connect-without-odbc/">Connecting to SQL Server from a Mac without ODBC drivers</a> — why the driver stack is the part that hurts.</li>
+    <li><a href="/ssms-for-mac/">SSMS for Mac: what to use when SQL Server Management Studio will not run</a>.</li>
+  </ul>
+</main>
+
+<section class="section faq narrow">
+  <h2>Questions</h2>
+
+  <div class="qa">
+    <h3>Can a Mac use Windows authentication against SQL Server?</h3>
+    <p>Yes. macOS ships with a full Kerberos implementation, and SQL Server accepts Kerberos tickets as Windows authentication. Once your Mac holds a ticket for the domain, a client that speaks TDS directly can sign in with no password prompt at all. NTLM is available where Kerberos is not.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Do I need to join the Mac to the domain for Kerberos SSO?</h3>
+    <p>No. Domain binding is one way to get tickets automatically, but it is not a requirement. Running kinit with your domain account is enough to obtain a ticket-granting ticket, and that ticket is all the client needs.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Why does SQL Server reject my Kerberos login with error 18452?</h3>
+    <p>Error 18452 — login from an untrusted domain — usually means the server could not tie your credential to a domain principal. The common causes are a missing or wrong service principal name on the SQL Server service account, an expired ticket, or a realm name written in the wrong case.</p>
+  </div>
+
+</section>
+
+
+<footer>
+  <nav class="footer-guides" aria-label="Guides">
+    <a href="/windows-authentication-kerberos/">Kerberos single sign-on</a>
+    <a href="/entra-id-sql-server-mac/">Entra ID sign-in</a>
+    <a href="/connect-without-odbc/">Connecting without ODBC</a>
+    <a href="/ssms-for-mac/">SSMS for Mac</a>
+    <a href="/azure-data-studio-alternative-mac/">After Azure Data Studio</a>
+  </nav>
+  <div>Copyright © 2026 Krystian Kołodziej</div>
+  <nav aria-label="Secondary">
+    <a href="mailto:krystiankolodziej@gmail.com?Subject=Native%20SQL%20Server%20Manager">Contact</a>
+    <a href="/changelog/">Changelog</a>
+    <a href="/">Home</a>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="https://nsm.kbksoftware.com">Native SQLite Manager</a>
+  </nav>
+</footer>
+
+</body>
+</html>

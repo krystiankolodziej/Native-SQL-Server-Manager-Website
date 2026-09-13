@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /cdn-cgi/
+
+Sitemap: https://nssm.kbksoftware.com/sitemap.xml

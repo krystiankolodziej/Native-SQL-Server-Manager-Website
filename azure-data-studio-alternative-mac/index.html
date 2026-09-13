@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azure Data Studio alternative for Mac — after the retirement</title>
+<meta name="description" content="Azure Data Studio was retired on 28 February 2026. What replaces it on macOS — VS Code with the MSSQL extension, DBeaver, TablePlus, or a native TDS client.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nssm.kbksoftware.com/azure-data-studio-alternative-mac/">
+<link rel="preload" href="../assets/fonts/zilla-slab-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/zilla-slab-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/site.js" defer></script>
+<link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Native SQL Server Manager">
+<meta property="og:title" content="Azure Data Studio alternative for Mac — what to use after the retirement">
+<meta property="og:description" content="ADS reached end of support on 28 February 2026. An honest look at what replaces it on macOS.">
+<meta property="og:url" content="https://nssm.kbksoftware.com/azure-data-studio-alternative-mac/">
+<meta property="og:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Native SQL Server Manager on macOS: objects explorer, T-SQL editor and results grid">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Azure Data Studio alternative for Mac">
+<meta name="twitter:description" content="ADS reached end of support on 28 February 2026. An honest look at what replaces it on macOS.">
+<meta name="twitter:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nssm.kbksoftware.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Azure Data Studio alternative for Mac", "item": "https://nssm.kbksoftware.com/azure-data-studio-alternative-mac/" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "When was Azure Data Studio retired?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Microsoft retired Azure Data Studio on 28 February 2026, having announced the date in February 2025. Existing installations still launch, but the product receives no further updates, fixes or security patches, and support cases can no longer be opened for it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does Microsoft recommend instead of Azure Data Studio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Visual Studio Code with the MSSQL extension. Existing queries, scripts and database projects carry over, though features specific to Azure Data Studio, such as its notebooks and dashboard widgets, do not."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is there a native macOS alternative to Azure Data Studio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Azure Data Studio and VS Code are both Electron applications, and DBeaver runs on Java. Native SQL Server Manager is written in Swift and AppKit and speaks the SQL Server wire protocol directly, so it needs no runtime and no ODBC driver."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo-link" href="/">
+      <svg class="logo-mark" viewBox="0 0 600 650" aria-hidden="true">
+        <ellipse class="logo-mark-shadow" cx="295" cy="635" rx="130" ry="12" />
+        <path class="logo-mark-path" d="M237.977 604C234.86 604 231.697 603.358 228.764 602.073C219.642 598.036 214.141 588.584 215.195 578.674C228.58 452.551 35.2309 401.946 33.2599 401.487C25.2839 399.468 18.9581 393.274 16.8036 385.337C14.6492 377.4 16.8953 368.866 22.7168 363.039C32.2055 353.542 258.284 129.145 541.936 5.91139C549.867 2.47041 558.851 3.75502 565.544 9.12295C572.19 14.5368 575.261 23.208 573.52 31.5582C519.154 295.092 265.939 584.134 255.213 596.292C250.675 601.293 244.349 604 237.977 604Z" />
+      </svg>
+      <span class="logo-name">Native SQL Server Manager</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#features">Features</a>
+      <a href="/#screenshots">Screenshots</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<p class="breadcrumb"><a href="/">Home</a> › Azure Data Studio alternative for Mac</p>
+
+<main class="article">
+  <h1>Azure Data Studio alternatives for the Mac, after the retirement</h1>
+  <p class="standfirst">
+    Azure Data Studio reached end of support on 28 February 2026. For Mac users it was the obvious
+    cross-platform answer for years, which makes its absence more disruptive here than on Windows —
+    where SSMS was always waiting.
+  </p>
+
+  <h2>What actually happened</h2>
+  <p>
+    Microsoft announced the retirement a year ahead, in February 2025, and carried it out on
+    28 February 2026. Nothing stops working the day after: an installed copy still launches and still
+    connects. What ends is maintenance. There are no further releases, no security fixes, and no
+    support case to open when something breaks. For a tool that holds credentials to production
+    databases, “still runs” and “still advisable” are not the same statement.
+  </p>
+  <p>
+    Microsoft’s own recommendation is Visual Studio Code with the MSSQL extension, and it is a
+    reasonable one — queries, scripts and database projects carry over. Not everything does: the
+    MSSQL extension has since gained SQL Notebooks, but the dashboard and insight widgets have no
+    equivalent.
+  </p>
+
+  <h2>The options on macOS</h2>
+
+  <h3>Visual Studio Code with the MSSQL extension</h3>
+  <p>
+    The supported path, and the right default if you already live in VS Code. You get a SQL editor,
+    connections and a results grid inside an editor you know. It is an Electron application, so it
+    carries the memory and launch characteristics that implies, and object administration is
+    shallower than either SSMS or a dedicated client.
+  </p>
+
+  <h3>DBeaver</h3>
+  <p>
+    Free, open source, and covers an enormous range of database engines. That breadth is the trade:
+    it runs on Java, its interface belongs to no platform in particular, and SQL Server is one of
+    dozens of engines it reaches through a JDBC driver rather than a protocol of its own.
+  </p>
+
+  <h3>TablePlus</h3>
+  <p>
+    Fast, pleasant, and genuinely native on macOS. It is built around many engines rather than one,
+    so its SQL Server support is broad rather than deep — the object tree does not go where a
+    SQL Server-specific tool can go.
+  </p>
+
+  <h3>A Windows VM with SSMS</h3>
+  <p>
+    Still the complete answer for administration — Agent jobs, replication, deep server
+    configuration — and still a virtual machine you have to license, update and give several
+    gigabytes of RAM to keep a query window open.
+  </p>
+
+  <h2>Where this app fits</h2>
+  <p>
+    Native SQL Server Manager is deliberately narrower than any of the above: one engine, one
+    platform. It is written in Swift and AppKit, and it implements TDS — the SQL Server wire protocol
+    — itself, so there is no runtime, no ODBC driver and no configuration file between you and the
+    server.
+  </p>
+  <p>
+    Against Azure Data Studio specifically, three differences matter most in daily use:
+  </p>
+  <ul>
+    <li>
+      <strong>Sign-in.</strong> SQL logins, Microsoft Entra&nbsp;ID in four flavours, Kerberos single
+      sign-on with no password at all, and NTLM — chosen from a picker rather than assembled in a
+      connection string.
+    </li>
+    <li>
+      <strong>The object tree.</strong> Every database on the server, expanded only when you ask, down
+      to keys, constraints, indexes, dependent views and routine parameters — with scripting to
+      CREATE and DROP for any of them, SELECT, INSERT, UPDATE and DELETE for tables, and ALTER for
+      routines.
+    </li>
+    <li>
+      <strong>Behaving like a Mac app.</strong> It launches immediately, stays light on memory, and
+      does not ask you to think about a runtime.
+    </li>
+  </ul>
+  <p>
+    What it does not try to be: a notebook environment, a multi-engine client, or a replacement for
+    SSMS’s administrative depth. If your day is Agent jobs and replication topology, keep the VM.
+    If your day is queries, schema and data on SQL Server from a Mac, this is built for exactly that.
+  </p>
+
+  <figure>
+    <a class="zoom" href="../assets/01_Main_Light_full.webp">
+      <picture>
+        <source srcset="../assets/01_Main_Light.webp" type="image/webp">
+        <img src="../assets/01_Main_Light.jpg" alt="Main window in light mode with the objects explorer expanded over tables and stored procedures, a T-SQL editor and results grids" width="1400" height="875" loading="lazy" decoding="async">
+      </picture>
+    </a>
+    <figcaption>One engine, one platform: the objects explorer and editor built specifically for SQL Server on macOS.</figcaption>
+  </figure>
+  <div class="cta-band">
+    <h2>A supported home for your SQL Server work</h2>
+    <p>Native, actively maintained, no runtime and no drivers. $19.99, one-time purchase.</p>
+    <a class="buy-button" href="https://apps.apple.com/app/id6775192660">Get it on the Mac App Store</a>
+  </div>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/ssms-for-mac/">SSMS for Mac: what to use when SQL Server Management Studio will not run</a>.</li>
+    <li><a href="/entra-id-sql-server-mac/">Signing in to Azure SQL with Microsoft Entra ID from a Mac</a>.</li>
+    <li><a href="/connect-without-odbc/">Connecting to SQL Server from a Mac without ODBC drivers</a>.</li>
+  </ul>
+</main>
+
+<section class="section faq narrow">
+  <h2>Questions</h2>
+
+  <div class="qa">
+    <h3>When was Azure Data Studio retired?</h3>
+    <p>Microsoft retired Azure Data Studio on 28 February 2026, having announced the date in February 2025. Existing installations still launch, but the product receives no further updates, fixes or security patches, and support cases can no longer be opened for it.</p>
+  </div>
+
+  <div class="qa">
+    <h3>What does Microsoft recommend instead of Azure Data Studio?</h3>
+    <p>Visual Studio Code with the MSSQL extension. Existing queries, scripts and database projects carry over, though features specific to Azure Data Studio, such as its notebooks and dashboard widgets, do not.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Is there a native macOS alternative to Azure Data Studio?</h3>
+    <p>Yes. Azure Data Studio and VS Code are both Electron applications, and DBeaver runs on Java. Native SQL Server Manager is written in Swift and AppKit and speaks the SQL Server wire protocol directly, so it needs no runtime and no ODBC driver.</p>
+  </div>
+
+</section>
+
+
+<footer>
+  <nav class="footer-guides" aria-label="Guides">
+    <a href="/windows-authentication-kerberos/">Kerberos single sign-on</a>
+    <a href="/entra-id-sql-server-mac/">Entra ID sign-in</a>
+    <a href="/connect-without-odbc/">Connecting without ODBC</a>
+    <a href="/ssms-for-mac/">SSMS for Mac</a>
+    <a href="/azure-data-studio-alternative-mac/">After Azure Data Studio</a>
+  </nav>
+  <div>Copyright © 2026 Krystian Kołodziej</div>
+  <nav aria-label="Secondary">
+    <a href="mailto:krystiankolodziej@gmail.com?Subject=Native%20SQL%20Server%20Manager">Contact</a>
+    <a href="/changelog/">Changelog</a>
+    <a href="/">Home</a>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="https://nsm.kbksoftware.com">Native SQLite Manager</a>
+  </nav>
+</footer>
+
+</body>
+</html>

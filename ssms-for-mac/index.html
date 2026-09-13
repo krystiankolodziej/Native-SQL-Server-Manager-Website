@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SSMS for Mac — what to use instead of Management Studio</title>
+<meta name="description" content="SQL Server Management Studio is Windows-only. What your options actually are on macOS in 2026, and which parts of SSMS still have no substitute.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://nssm.kbksoftware.com/ssms-for-mac/">
+<link rel="preload" href="../assets/fonts/zilla-slab-500.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/zilla-slab-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/site.js" defer></script>
+<link rel="icon" type="image/png" sizes="64x64" href="../assets/favicon-64.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Native SQL Server Manager">
+<meta property="og:title" content="SSMS for Mac — how to work with SQL Server when Management Studio will not run">
+<meta property="og:description" content="There is no Mac build of SSMS and there never has been. Here is what the alternatives give you, and what they give up.">
+<meta property="og:url" content="https://nssm.kbksoftware.com/ssms-for-mac/">
+<meta property="og:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Native SQL Server Manager on macOS: objects explorer, T-SQL editor and results grid">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SSMS for Mac — the honest options">
+<meta name="twitter:description" content="There is no Mac build of SSMS and there never has been. Here is what the alternatives give you, and what they give up.">
+<meta name="twitter:image" content="https://nssm.kbksoftware.com/assets/og-image.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://nssm.kbksoftware.com/" },
+    { "@type": "ListItem", "position": 2, "name": "SSMS for Mac", "item": "https://nssm.kbksoftware.com/ssms-for-mac/" }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is there a version of SQL Server Management Studio for Mac?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. SSMS is a Windows application built on Windows-specific components, and Microsoft has never shipped a macOS build. The options are running it inside a Windows virtual machine or over remote desktop, or using a client that runs on macOS natively."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I run SSMS on a Mac with Parallels or UTM?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. SSMS runs inside a Windows virtual machine, including Windows on ARM on Apple silicon, where it executes under emulation. It works, at the cost of a Windows licence, several gigabytes of memory and a second operating system to maintain."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which parts of SSMS have no equivalent on macOS?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Deep administration: SQL Server Agent job management, replication topology, and much of the server-level configuration and maintenance surface. For querying, schema browsing, scripting and data work, macOS clients cover the ground well."
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a class="logo-link" href="/">
+      <svg class="logo-mark" viewBox="0 0 600 650" aria-hidden="true">
+        <ellipse class="logo-mark-shadow" cx="295" cy="635" rx="130" ry="12" />
+        <path class="logo-mark-path" d="M237.977 604C234.86 604 231.697 603.358 228.764 602.073C219.642 598.036 214.141 588.584 215.195 578.674C228.58 452.551 35.2309 401.946 33.2599 401.487C25.2839 399.468 18.9581 393.274 16.8036 385.337C14.6492 377.4 16.8953 368.866 22.7168 363.039C32.2055 353.542 258.284 129.145 541.936 5.91139C549.867 2.47041 558.851 3.75502 565.544 9.12295C572.19 14.5368 575.261 23.208 573.52 31.5582C519.154 295.092 265.939 584.134 255.213 596.292C250.675 601.293 244.349 604 237.977 604Z" />
+      </svg>
+      <span class="logo-name">Native SQL Server Manager</span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="/#features">Features</a>
+      <a href="/#screenshots">Screenshots</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<p class="breadcrumb"><a href="/">Home</a> › SSMS for Mac</p>
+
+<main class="article">
+  <h1>SSMS for Mac: what to use when Management Studio will not run</h1>
+  <p class="standfirst">
+    There is no Mac build of SQL Server Management Studio, there never has been, and Microsoft has
+    given no sign of making one. That is the short answer. The useful answer is about which parts of
+    SSMS you actually use.
+  </p>
+
+  <h2>Why SSMS cannot simply be ported</h2>
+  <p>
+    SSMS is a Windows desktop application built on Windows-specific foundations — the Visual Studio
+    shell, Windows UI frameworks, COM components. It is not a thin layer over a database protocol
+    that could be recompiled elsewhere. Running it on a Mac means running Windows: a virtual machine
+    under Parallels, VMware or UTM, or a remote desktop session to a machine that has it.
+  </p>
+  <p>
+    That works. On Apple silicon it means Windows on ARM with SSMS executing under emulation, which
+    is slower than it sounds like it should be, plus a Windows licence, several gigabytes of memory
+    and a second operating system to patch. For occasional administration this is a fair trade. For
+    writing queries every day it is a heavy one.
+  </p>
+
+  <h2>Splitting SSMS into the parts you use</h2>
+  <p>
+    SSMS is really several tools sharing a window. Deciding what you need on macOS gets much easier
+    once they are separated:
+  </p>
+  <table>
+    <tr><th>What you do in SSMS</th><th>On macOS</th></tr>
+    <tr>
+      <td>Write and run T-SQL, read results, export them</td>
+      <td>Fully covered by macOS clients</td>
+    </tr>
+    <tr>
+      <td>Browse the object tree, script objects, read properties</td>
+      <td>Covered, with real differences in depth between tools</td>
+    </tr>
+    <tr>
+      <td>Edit data in a grid, copy rows as INSERT statements, import CSV</td>
+      <td>Covered</td>
+    </tr>
+    <tr>
+      <td>Read graphical execution plans</td>
+      <td>Covered by some tools, this one included</td>
+    </tr>
+    <tr>
+      <td>SQL Server Agent jobs, replication, deep server configuration</td>
+      <td>Not covered — this is where the VM stays</td>
+    </tr>
+  </table>
+  <p>
+    Most people asking for “SSMS on a Mac” are describing the first three rows. If that is you, a
+    virtual machine is a large price for something a native application already does.
+  </p>
+
+  <h2>The realistic options in 2026</h2>
+  <p>
+    One thing changed recently and is worth stating plainly: <strong>Azure Data Studio was retired on
+    28 February 2026</strong>. It was the standard recommendation in almost every older article on
+    this subject, and it is no longer maintained. Advice written before 2026 that opens with “install
+    Azure Data Studio” should be read with that in mind.
+  </p>
+  <ul>
+    <li>
+      <strong>VS Code with the MSSQL extension</strong> — Microsoft’s supported cross-platform path
+      and the natural landing place for former Azure Data Studio users. An Electron application, with
+      administration shallower than SSMS.
+    </li>
+    <li>
+      <strong>DBeaver</strong> — free, open source, covers many engines; runs on Java and reaches
+      SQL Server through a JDBC driver like every other engine it supports.
+    </li>
+    <li>
+      <strong>TablePlus</strong> — native and quick, built around many engines rather than one.
+    </li>
+    <li>
+      <strong>A Windows VM</strong> — the only complete answer, if what you need is the last row of
+      the table above.
+    </li>
+    <li>
+      <strong>Native SQL Server Manager</strong> — one engine, one platform: written in Swift and
+      AppKit, speaking the SQL Server wire protocol directly.
+    </li>
+  </ul>
+
+  <h2>What a SQL Server-only Mac client can do that a general one cannot</h2>
+  <p>
+    Building for a single engine removes the need to find the common denominator across ten of them.
+    In practice that shows up as:
+  </p>
+  <ul>
+    <li>
+      <strong>Sign-in that matches a corporate environment.</strong> SQL logins, Microsoft
+      Entra&nbsp;ID, <a href="/windows-authentication-kerberos/">Kerberos single sign-on</a> with no
+      password at all, and NTLM.
+    </li>
+    <li>
+      <strong>A tree that goes all the way down.</strong> Every database on the server, expanded when
+      you ask for it: tables, views, procedures, functions, triggers, DDL triggers, synonyms,
+      sequences, user-defined types and assemblies — down to keys, constraints, indexes, dependent
+      views and routine parameters.
+    </li>
+    <li>
+      <strong>Scripting like SSMS.</strong> CREATE and DROP for any object, SELECT, INSERT, UPDATE
+      and DELETE for tables, CREATE, ALTER or CREATE OR ALTER for routines — into the editor, a new
+      tab or the clipboard, with a filled-in parameters form for executing procedures and functions.
+    </li>
+    <li>
+      <strong>Values rendered the way SSMS renders them.</strong> Dates, times and offsets without
+      silent time-zone shifts; binary, rowversion and geography left untouched until you ask for hex
+      or a preview. If you have ever compared a result on a Mac against the same query in SSMS and
+      found the timestamps disagreed, this is the difference.
+    </li>
+    <li>
+      <strong>Execution plans as diagrams.</strong> Switch on the actual execution plan and read it
+      laid out the way SSMS lays it out, with relative cost per operator and warnings marked.
+    </li>
+    <li>
+      <strong>Extended properties.</strong> A proper editor for MS_Description, so schema
+      documentation does not require a different tool.
+    </li>
+  </ul>
+
+  <figure>
+    <a class="zoom" href="../assets/21_Main_Dark_full.webp">
+      <picture>
+        <source srcset="../assets/21_Main_Dark.webp" type="image/webp">
+        <img src="../assets/21_Main_Dark.jpg" alt="Native SQL Server Manager in dark mode: objects explorer on the left, a T-SQL editor with two queries, and results grids below" width="1600" height="1000" loading="lazy" decoding="async">
+      </picture>
+    </a>
+    <figcaption>The parts of SSMS most people use daily, in an application that belongs on macOS.</figcaption>
+  </figure>
+
+  <h2>What it does not replace</h2>
+  <p>
+    It is worth being clear: Agent job management, replication and the deeper server administration
+    surface are not here. If those are your working day, keep SSMS in a VM and use it for what only
+    it can do. Plenty of people run both — the VM for administration, a native client for everything
+    else — and stop opening the VM most days.
+  </p>
+  <div class="cta-band">
+    <h2>SQL Server on the Mac, without Windows underneath</h2>
+    <p>Native, no drivers, no runtime, corporate sign-in included. $19.99, one-time purchase.</p>
+    <a class="buy-button" href="https://apps.apple.com/app/id6775192660">Get it on the Mac App Store</a>
+  </div>
+
+  <h2>Related</h2>
+  <ul>
+    <li><a href="/azure-data-studio-alternative-mac/">Azure Data Studio alternatives after the retirement</a>.</li>
+    <li><a href="/windows-authentication-kerberos/">Kerberos single sign-on to SQL Server from a Mac</a>.</li>
+    <li><a href="/connect-without-odbc/">Connecting to SQL Server from a Mac without ODBC drivers</a>.</li>
+  </ul>
+</main>
+
+<section class="section faq narrow">
+  <h2>Questions</h2>
+
+  <div class="qa">
+    <h3>Is there a version of SQL Server Management Studio for Mac?</h3>
+    <p>No. SSMS is a Windows application built on Windows-specific components, and Microsoft has never shipped a macOS build. The options are running it inside a Windows virtual machine or over remote desktop, or using a client that runs on macOS natively.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Can I run SSMS on a Mac with Parallels or UTM?</h3>
+    <p>Yes. SSMS runs inside a Windows virtual machine, including Windows on ARM on Apple silicon, where it executes under emulation. It works, at the cost of a Windows licence, several gigabytes of memory and a second operating system to maintain.</p>
+  </div>
+
+  <div class="qa">
+    <h3>Which parts of SSMS have no equivalent on macOS?</h3>
+    <p>Deep administration: SQL Server Agent job management, replication topology, and much of the server-level configuration and maintenance surface. For querying, schema browsing, scripting and data work, macOS clients cover the ground well.</p>
+  </div>
+
+</section>
+
+
+<footer>
+  <nav class="footer-guides" aria-label="Guides">
+    <a href="/windows-authentication-kerberos/">Kerberos single sign-on</a>
+    <a href="/entra-id-sql-server-mac/">Entra ID sign-in</a>
+    <a href="/connect-without-odbc/">Connecting without ODBC</a>
+    <a href="/ssms-for-mac/">SSMS for Mac</a>
+    <a href="/azure-data-studio-alternative-mac/">After Azure Data Studio</a>
+  </nav>
+  <div>Copyright © 2026 Krystian Kołodziej</div>
+  <nav aria-label="Secondary">
+    <a href="mailto:krystiankolodziej@gmail.com?Subject=Native%20SQL%20Server%20Manager">Contact</a>
+    <a href="/changelog/">Changelog</a>
+    <a href="/">Home</a>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="https://nsm.kbksoftware.com">Native SQLite Manager</a>
+  </nav>
+</footer>
+
+</body>
+</html>
